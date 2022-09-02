@@ -4,39 +4,40 @@ from numba import jit
 import numpy as np
 import time
 
-y = int(input('Enter the size of the matrix : '))
+x = int(input('Enter the size of the Matrix :: '))
 
-start = time.time()
-
-def go_slow(b):
+# << Without JIT compiler >> #
+def go_slow(a):
     trace = 0.0
-    for i in range(b.shape[0]):
-        trace += np.tanh(b[i,i])
+    for i in range(a.shape[0]):
+        trace += np.tanh(a[i,i])
+    return a + trace
 
-    return b + trace
-
-x = np.arange(y**2).reshape(y,y)
-go_slow(x)
-
-stop = time.time()
-print(f'Without JIT :: Elapsed Time to run the code is : {stop - start : .2f} seconds.')
-
-
-###########################################33
-
+y = np.arange(x**2).reshape(x,x)
 start = time.time()
+go_slow(y)
+stop = time.time()
 
+print(f'Without JIT :: Total elapsed time to run the code : {stop-start:.2f} seconds')
+
+
+# << With JIT compiler >> #
 @jit(nopython=True)
 def go_fast(a):
     trace = 0.0
     for i in range(a.shape[0]):
         trace += np.tanh(a[i,i])
-
     return a + trace
 
-x = np.arange(y**2).reshape(y,y)
-go_fast(x)
-
+y = np.arange(x**2).reshape(x,x)
+start = time.time()
+go_fast(y)
 stop = time.time()
-print(f'With JIT :: Elapsed Time to run the code is : {stop - start : .2f} seconds.')
 
+print(f'Pre-Compiled :: Total elapsed time to run the code : {stop-start:.2f} seconds.')
+
+start = time.time()
+go_fast(y)
+stop = time.time()
+
+print(f'Post-Copiled :: Total elapsed time to run the code : {stop-start:.2f} seconds.')

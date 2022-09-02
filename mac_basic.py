@@ -6,6 +6,7 @@ import time
 print(f'This system has {mp.cpu_count()} number of CPUs')
 
 def print_fun(continent):
+    print(f'Starting {proc}')
     print(f'The name of the continent is : {continent}')
 
 
@@ -20,7 +21,6 @@ if __name__=='__main__':
 
         # Start the appended Process
         proc.start()
-        print(f'Starting {proc}')
 
 
     # Waiting for proc to finish

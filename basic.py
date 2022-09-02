@@ -3,7 +3,7 @@
 import multiprocessing as mp
 
 # Print No of CPUs available on the system
-print(f'This system has {mp.cpu_count()} numbers of CPUs')
+print(f'\nThis system has {mp.cpu_count()} numbers of CPUs.\n')
 
 def print_fun(continent):
     print(f'Starting Process : {continent}')
@@ -30,6 +30,6 @@ for i, continent in enumerate(continents):
 for proc in procs:
     proc.join()
 
-print(f'\n\nAll processes are finished')
+print(f'\nAll processes are finished.\n')
 
 ########################################3
