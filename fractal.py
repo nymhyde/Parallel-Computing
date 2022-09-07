@@ -97,19 +97,18 @@ start = time.time()
 jit_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
 end = time.time()
 just_compile = end - start
-print(f'First JIT run :: Time to Execute :: {just_compile:.5f} seconds')
+print(f'Non-compiled JIT run :: Time to Execute :: {just_compile:.5f} seconds')
 
 
-for i in range(1):
-    # < Pre-compile run : here the decorated functions are already converted to machine code >
-    start = time.time()
-    jit_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
-    end = time.time()
-    pre_compile = end - start
-    print(f'Pre-Compiled JIT run :: Time to Execute :: {pre_compile:.5f} seconds')
+# < Pre-compile run : here the decorated functions are already converted to machine code >
+start = time.time()
+jit_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
+end = time.time()
+pre_compile = end - start
+print(f'Compiled JIT run :: Time to Execute :: {pre_compile:.5f} seconds')
 
 
-print(f'\nFirst JIT >> Pure Python :: {py_run/just_compile:.2f}x Faster')
+print(f'\nNon-Compiled JIT >> Pure Python :: {py_run/just_compile:.2f}x Faster')
 print(f'Pre-Compiled JIT >> Pure Python :: {py_run/pre_compile:.2f}x Faster')
 print(f'Pre-Compiled JIT >> Non-Compiled JIT :: {just_compile/pre_compile:.2f}x Faster')
 
@@ -153,20 +152,20 @@ start = time.time()
 para_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
 end = time.time()
 para_just_compile = end - start
-print(f'First JIT Parallel run :: Time to Execute :: {para_just_compile:.5f} seconds')
+print(f'Non-Compiled JIT Parallel run :: Time to Execute :: {para_just_compile:.5f} seconds')
 
-for i in range(1):
 
-    # < Pre-compile run : here the decorated functions are already converted to machine code >
-    start = time.time()
-    para_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
-    end = time.time()
-    para_pre_compile = end - start
-    print(f'Pre-Compiled JIT Parallel run :: Time to Execute :: {para_pre_compile:.5f} seconds')
+# < Pre-compile run : here the decorated functions are already converted to machine code >
+start = time.time()
+para_create_fractal(-2.0, -1.7, -0.1, 0.1, image, 20)
+end = time.time()
+para_pre_compile = end - start
+print(f'Compiled JIT Parallel run :: Time to Execute :: {para_pre_compile:.5f} seconds')
 
-print(f'\nFirst JIT + Parallel >> Pure Python :: {py_run/para_just_compile:.2f}x Faster')
-print(f'Pre-Compiled JIT + Parallel >> Pure Python :: {py_run/para_pre_compile:.2f}x Faster')
-print(f'Pre-Compiled JIT + Parallel >> Non-Compiled JIT :: {para_just_compile/para_pre_compile:.2f}x Faster')
+print(f'\nNon-Compiled JIT + Parallel >> Pure Python :: {py_run/para_just_compile:.2f}x Faster')
+print(f'Non-Compiled JIT + Parallel >> Non-Compiled JIT :: {just_compile/para_just_compile:.2f}x Faster')
+print(f'Compiled JIT + Parallel >> Pure Python :: {py_run/para_pre_compile:.2f}x Faster')
+print(f'Compiled JIT + Parallel >> Compiled JIT :: {pre_compile/para_pre_compile:.2f}x Faster')
 
 
 
@@ -180,7 +179,6 @@ print(f'\n\n***** JIT Machine Code + Parallelism (CUDA) Run *****')
 from numba import cuda
 from numba import *
 
-global cuda_i, cuda_iter
 @cuda.jit('uint32(f8, f8, uint32)', device=True)
 def cuda_mandel(x,y, max_iters):
     c = complex(x, y)
@@ -231,7 +229,7 @@ print(f'CUDA run :: Time to Execute :: {cuda_just_compile:.5f} seconds')
 
 print(f'\nCUDA run >> Pure Python :: {py_run/cuda_just_compile:.2f}x Faster')
 print(f'CUDA run >> JIT :: {pre_compile/cuda_just_compile:.2f}x Faster')
-print(f'CUDA run >> Parallel JIT :: {para_pre_compile/cuda_just_compile:.2f}x Faster \n')
+print(f'CUDA run >> JIT + Parallel :: {para_pre_compile/cuda_just_compile:.2f}x Faster \n')
 
 '''
 # << Plot the Image >>

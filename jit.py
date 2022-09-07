@@ -22,7 +22,7 @@ print(f'Without JIT :: Total elapsed time to run the code : {stop-start:.2f} sec
 
 
 # << With JIT compiler >> #
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def go_fast(a):
     trace = 0.0
     for i in range(a.shape[0]):
