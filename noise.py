@@ -8,9 +8,18 @@ import numpy as np
 from numba import jit
 import numba as nb
 import time
+import argparse
 
-# << kernel_size variable >>
-k_size = 3
+
+# << kernel_size variable as parsed argument >>
+ap = argparse.ArgumentParser()
+ap.add_argument('-k', '--kernel_size', type=int, default=7,
+        help='size of the kernel to be applied n x n')
+args = vars(ap.parse_args())
+
+k_size = args['kernel_size']
+
+print(f'Using a Kernel of size {k_size} x {k_size}')
 
 # << Sequential Compute >>
 
