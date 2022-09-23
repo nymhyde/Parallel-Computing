@@ -30,15 +30,15 @@ struct cuComplex
 // checking if the point belong to julia set
 __device__ int julia(int x, int y)
 {
-    const float scale = 0.5;
+    const float scale = 1;
     float jx = scale * (float)(DIM/2 - x)/(DIM/2);
     float jy = scale * (float)(DIM/2 - y)/(DIM/2);
 
-    cuComplex c(-0.8, 0.156);
+    cuComplex c(-0.654, -0.4477);
     cuComplex a(jx, jy);
 
     int i = 0;
-    for (i=0; i<200; i++)
+    for (i=0; i<64; i++)
     {
         a  = a*a + c;
         if (a.magnitude2() > 1000)
