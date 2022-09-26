@@ -10,7 +10,7 @@ const int scale = 1;
 const int N = 1024*scale*scale;
 // constansts
 const int TILE_DIM = 32*scale;
-const int BLOCK_ROWS = TILE_DIM/4;
+const int BLOCK_ROWS = TILE_DIM/8;
 
 
 // verify :: check the two matrices if they match or not
@@ -65,6 +65,7 @@ __global__ void transpose_parallel_per_row(float in[], float out[])
 // launched in tile fashion non-shared memory
     // doesn't use shared memory
     // Global memory reads are coalesced but writes are not
+    // 1 Tile = 1 Block in the Grid
 __global__ void transpose_tiled(float in[], float out[])
 {
     int x = threadIdx.x + blockIdx.x * TILE_DIM;
@@ -77,6 +78,7 @@ __global__ void transpose_tiled(float in[], float out[])
 
 // launched in tile fashion shared memory
     // Uses shared memory to achieve coalesign in both reads and writes
+    // Uses the fact that tile.T can be mapped to Matrix.T
 __global__ void transpose_tiled_shared(float in[], float out[])
 {
     __shared__ float tile[TILE_DIM][TILE_DIM];
@@ -84,6 +86,7 @@ __global__ void transpose_tiled_shared(float in[], float out[])
     int x = threadIdx.x + blockIdx.x * TILE_DIM;
     int y = threadIdx.y + blockIdx.y * TILE_DIM;
 
+    // read global memory -> tiles
     for (int j=0; j < TILE_DIM; j+= BLOCK_ROWS)
         tile[threadIdx.y+j][threadIdx.x] = in[(y+j)*N + x];
 
