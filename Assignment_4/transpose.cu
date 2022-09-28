@@ -10,7 +10,7 @@ const int scale = 1;
 const int N = 1024*scale*scale;
 // constansts
 const int TILE_DIM = 32*scale;
-const int BLOCK_ROWS = TILE_DIM/8;
+const int BLOCK_ROWS = TILE_DIM/4;
 
 
 // verify :: check the two matrices if they match or not
@@ -91,6 +91,7 @@ __global__ void transpose_tiled_shared(float in[], float out[])
         tile[threadIdx.y+j][threadIdx.x] = in[(y+j)*N + x];
 
     // like the name suggests - sync threads 
+        // to avoid race conditions
     __syncthreads();
 
     x = threadIdx.x + blockIdx.y * TILE_DIM;
